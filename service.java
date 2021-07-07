@@ -3,6 +3,7 @@ package happysorry.src.main.java.threshold;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class service implements Runnable{
@@ -10,7 +11,15 @@ public class service implements Runnable{
     public  String con_name = "";
     public void run(){
         double startTime = System.nanoTime();
+        int iter = 0;
         while((System.nanoTime() - startTime) / 1e9 < sim_time){
+            iter ++;
+            int flag = read();
+            if(flag != 0){
+                write(iter);
+                Wait(40000);
+            }
+                
             // System.out.println("sim_time " + sim_time);
             double use = get_state2();
             System.out.println(con_name + " use " + use);
@@ -21,9 +30,37 @@ public class service implements Runnable{
                     add_cons(replicas);
                 }
             }
+            if(use < 10){
+                int replicas = get_cons();
+                if(replicas > 1){
+                    replicas --;
+                    add_cons(replicas);
+                }
+            }
 
             Wait(30000);
         }
+    }
+    public int read(){
+        String filename = "signal.txt";
+        try {
+            FileReader fr = new FileReader(filename);
+            BufferedReader r = new BufferedReader(fr);
+            int line = 0;
+            try {
+                line = Integer.parseInt(r.readLine());
+            if(line==1){
+                return 1;
+            }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     // public static void main(String[]args){
@@ -89,6 +126,18 @@ public class service implements Runnable{
             pr = run.exec(cmd);
         }catch(IOException e){
 
+        }
+    }
+    void write(int iter) {
+        try {
+            String filename = "error.txt";
+            FileWriter fw1 = new FileWriter(filename,true);
+            fw1.write(iter + "\n");
+            fw1.flush();
+            fw1.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 

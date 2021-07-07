@@ -36,7 +36,8 @@ public class new_send_request implements Runnable{
     }
 
     public static void read(){
-        filename = "input/exp20.dat";
+        // filename = "input/exp20.dat";
+        System.out.println("filename = " + filename);
         try {
             FileReader fr = new FileReader(filename);
             BufferedReader r = new BufferedReader(fr);

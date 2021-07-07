@@ -8,9 +8,9 @@ import main.java.threshold.health_check;
 
 public class Start {
     public static void main(String[]args){
-        int iter = 3;
+        int iter = 1;
         double sim_time = 3600;
-        String input_file = "input/exp20.dat";
+        String input_file = "input/exp_60.dat";
         ExecutorService es = Executors.newCachedThreadPool();
         restart r = new restart();
         for(int i=0;i<iter;i++){

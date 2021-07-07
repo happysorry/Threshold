@@ -2,6 +2,8 @@ package happysorry.src.main.java.threshold;
 
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,7 +27,11 @@ public class get_all_use implements Runnable{
         add_cons();
         add_machine();
         double startTime = System.nanoTime();
+        int iter = 0;
         while(true){
+            int flag = read();
+            if(flag != 0)
+                Wait(140000);
             double endtime = System.nanoTime() - startTime;
             endtime /= 1e9;
             if(endtime > sim_time)
@@ -39,7 +45,27 @@ public class get_all_use implements Runnable{
         Thread.currentThread().interrupt();
     }
 
-
+    public int read(){
+        String filename = "signal.txt";
+        try {
+            FileReader fr = new FileReader(filename);
+            BufferedReader r = new BufferedReader(fr);
+            int line = 0;
+            try {
+                line = Integer.parseInt(r.readLine());
+            if(line==1){
+                return 1;
+            }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     public void add_cons(){
         cons.add("app_mn1");
@@ -102,19 +128,24 @@ public class get_all_use implements Runnable{
                         String[] sp = line.split("%");
                         String[] sp2 = sp[0].split(" ");
                         String ii = sp2[sp2.length - 1];
+
+                        double u = Double.parseDouble(ii);
+                        // u /= 60;
+                        // u *= 100;
+                        String tmp = String.valueOf(u);
                         // System.out.println("ii" + ii);
                         switch(j){
                             case 0:
-                                mn1.add(ii);
+                                mn1.add(tmp);
                                 break;
                             case 1:
-                                mn2.add(ii);
+                                mn2.add(tmp);
                                 break;
                             case 2:
-                                mnae1.add(ii);
+                                mnae1.add(tmp);
                                 break;
                             case 3:
-                                mnae2.add(ii);
+                                mnae2.add(tmp);
                                 break;
                         }
                     }
